@@ -3,22 +3,24 @@ const { check } = require('express-validator');
 
 const { validarCampos } = require('../middlewares/validarCampos')
 
-const { usuariosGet, usuariosPut, usuariosPost, usuariosDelete } = require('../controllers/usuarios');
+const { usuariosGet, usuarioPorIdGet, usuariosPut, usuariosPost, usuariosDelete } = require('../controllers/usuarios');
 
 const router = Router();
 
 router.get('/', usuariosGet );
 
-router.put('/', usuariosPut );
+router.get('/:id', usuarioPorIdGet );
+
+router.put('/:id', usuariosPut );
 
 router.post('/', [
-    check('name', 'El nombre es obligatorio').not().isEmpty(),
-    check('password', 'El password debe ser de mas de 8 caracteres').isLength({ min: 8 }),
-    check('email', 'Elcorreo no es válido').isEmail(),
-    check('admin', 'El rol es inválido').isIn(['admin', 'usuario']),
+    check('nombre', 'El nombre es obligatorio').not().isEmpty(),
+    check('contrasena', 'El password debe ser de mas de 8 caracteres').isLength({ min: 8 }),
+    check('correo', 'Elcorreo no es válido').isEmail(),
+    check('rol', 'El rol es inválido').isIn(['admin', 'usuario']),
     validarCampos
 ] , usuariosPost );
 
-router.delete('/', usuariosDelete );
+router.delete('/:id', usuariosDelete );
 
 module.exports = router;
