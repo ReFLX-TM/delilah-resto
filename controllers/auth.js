@@ -14,13 +14,13 @@ const login = async ( req, res = response ) => {
         
         // Verificar la contraseña
 
-        // TODO Arreglar y terminar el login
-
         const contrasenaValida = bcrypt.compareSync( contrasena, usuario.contrasena )
 
         if ( !contrasenaValida ) return res.status(400).send({msg: 'Usuario / Contraseña no son correctos - contraseña'})
 
         // Generar JWT
+
+        const token = await generarJWT( usuario.id );
 
         res.send({
             msg: 'Login OK'
