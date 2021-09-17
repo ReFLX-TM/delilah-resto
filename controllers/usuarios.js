@@ -6,7 +6,13 @@ const { body } = require('express-validator');
 // const MysqlService = require('../services/mysql')
 
 const usuariosGet = async (req = request, res = response) => {
-    return res.send(await Usuario.findAll())
+    const { limit = 5, offset = 0 } = req.query;
+
+    return res.send(await Usuario.findAll({
+        attributes: ['id', 'usuario', 'nombre', 'correo', 'telefono', 'direccion', 'rol'],
+        limit: Number(limit),
+        offset: Number(offset)
+    }))
 }
 
 const usuarioPorIdGet = async (req = request, res = response) => {
@@ -102,7 +108,7 @@ const usuariosDelete = async (req = request, res = response) => {
 
         await usuarioParaEliminar.destroy();
 
-        return res.status(203).send( usuarioParaEliminar );
+        return res.status(203).json( {usuarioParaEliminar} );
 
     } catch (error) {
         console.log(error)
