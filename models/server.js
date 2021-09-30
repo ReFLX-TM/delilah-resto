@@ -5,11 +5,16 @@ class Server {
     constructor () {
         this.app = express();
         this.port = process.env.PORT
-        this.usuariosPath = '/api/usuarios';
-        this.authPath = '/api/auth';
 
-        // Conexion a database
+        this.paths = {
+            auth: '/api/auth',
+            usuarios: '/api/usuarios',
+            productos: '/api/productos'
+        };
+
+        // Conexión a database
         this.dbConnection();
+
         // Middlewares
         this.middlewares();
 
@@ -32,9 +37,11 @@ class Server {
     }
 
     routes() {
-        this.app.use( this.authPath , require('../routes/auth'));
+        this.app.use( this.paths.auth , require('../routes/auth'));
 
-        this.app.use( this.usuariosPath , require('../routes/usuarios'));
+        this.app.use( this.paths.usuarios , require('../routes/usuarios'));
+
+        this.app.use( this.paths.productos , require('../routes/productos'));
     }
 
     listen() {
@@ -42,8 +49,6 @@ class Server {
             console.log('Servidor corriendo en puerto', this.port )
         } )
     }
-
-
 }
 
 module.exports = Server

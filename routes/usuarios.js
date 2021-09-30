@@ -10,7 +10,8 @@ const { usuariosGet, usuarioPorIdGet, usuariosPut, usuariosPost, usuariosDelete 
 const router = Router();
 
 router.get('/', [
-    validarJWT
+    validarJWT,
+    esAdmin
 ], usuariosGet );
 
 router.get('/:id', [
@@ -25,7 +26,7 @@ router.post('/', [
     check('nombre', 'El nombre es obligatorio').not().isEmpty(),
     check('contrasena', 'El password debe ser de mas de 8 caracteres').isLength({ min: 8 }),
     check('correo', 'Elcorreo no es válido').isEmail(),
-    check('rol', 'El rol es inválido').isIn(['admin', '']),
+    check('rol', 'El rol es inválido').isIn(['admin', 'cliente']),
     validarCampos
 ] , usuariosPost );
 
