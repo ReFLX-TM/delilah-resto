@@ -1,0 +1,303 @@
+openapi: 3.0.0
+info: 
+  title: delilah-resto
+  description: Aplicación para gestionar pedidos de un restaurante.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api
+    description: Servidor de la aplicación
+tags:
+  - name: Auth
+    description: Rutas para la autenticación de usuarios
+  - name: Usuarios
+    description: Rutas para la gestión de usuarios
+  - name: Productos
+    description: Rutas para la gestión de productos
+  - name: Pedidos
+    description: Rutas para la gestión de pedidos
+paths:
+  /auth/login:
+    post:
+      summary: Ruta para el inicio de sesión de un usuario mediante la creación de JWT
+      tags:
+        - Auth
+      requestBody: 
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginSchema'
+      responses:
+        200:
+          description: JSON con la información del usuario y su JWT
+  /usuarios:
+    get:
+      summary: Ruta para obtener todos los usuarios. Solo accesible por un usuario con el rol de admin
+      tags:
+        - Usuarios
+      security:
+        - securityToken: []
+      responses:
+        200:
+          description: JSON con una lista de todos los usuarios
+    post:
+      summary: Ruta para la creación de usuarios
+      tags: 
+        - Usuarios
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/schemas/UserSchema'
+      responses: 
+        200:
+          description: JSON con la información del usuario guardado
+  /usuarios/{id}:
+    get:
+      summary: Ruta para obtener la información de un usuario. Solo accesible por el mismo usuario o un usuario con el rol de admin
+      tags:
+        - Usuarios
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      security:
+        - securityToken: []
+      responses:
+        200:
+          description: JSON con la información del usuario en cuestión
+    put:
+      summary: Ruta para acatualizar la información de un usuario. Solo accesible por el mismo usuario o un usuario con el rol de admin
+      tags:
+        - Usuarios
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/schemas/UserSchema'
+      security:
+        - securityToken: []
+      responses:
+        200:
+          description: JSON con la información del usuario actualizado
+    delete:
+      summary: Ruta para eliminar un usuario. Solo accesible por el mismo usuario o un usuario con el rol de admin
+      tags:
+        - Usuarios
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      security:
+        - securityToken: []
+      responses:
+        200:
+          description: JSON con la información del usuario eliminado
+  /productos:
+    get:
+      summary: Ruta para obtener todos los productos.
+      tags:
+        - Productos
+      security:
+        - securityToken: []
+      responses:
+        200:
+          description: JSON con una lista de todos los productos
+    post:
+      summary: Ruta para la creación de productos
+      tags: 
+        - Productos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/schemas/ProductSchema'
+      security:
+        - securityToken: []
+      responses: 
+        200:
+          description: JSON con la información del producto guardado
+  /productos/{id}:
+    get:
+      summary: Ruta para obtener la información de un producto.
+      tags:
+        - Productos
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      security:
+        - securityToken: []
+      responses:
+        200:
+          description: JSON con la información del producto en cuestión
+    put:
+      summary: Ruta para acatualizar la información de un producto. Solo accesible por un usuario con el rol de admin.
+      tags:
+        - Productos
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/schemas/ProductSchema'
+      security:
+        - securityToken: []
+      responses:
+        200:
+          description: JSON con la información del producto actualizado
+    delete:
+      summary: Ruta para eliminar un producto. Solo accesible por un usuario con el rol de admin
+      tags:
+        - Productos
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      security:
+        - securityToken: []
+      responses:
+        200:
+          description: JSON con la información del producto eliminado
+  /pedidos:
+    get:
+      summary: Ruta para obtener todos los pedidos.
+      tags:
+        - Pedidos
+      security:
+        - securityToken: []
+      responses:
+        200:
+          description: JSON con una lista de todos los pedidos
+    post:
+      summary: Ruta para la creación de pedidos
+      tags: 
+        - Pedidos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/schemas/PurchaseSchema'
+      security:
+        - securityToken: []
+      responses: 
+        200:
+          description: JSON con la información del pedido guardado
+  /pedidos/{id}:
+    put:
+      summary: Ruta para actualizar el estado de un pedido. Solo accesible por un usuario con el rol de admin.
+      tags:
+        - Pedidos
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/schemas/PurchaseStateSchema'
+      security:
+        - securityToken: []
+      responses:
+        202:
+          description: JSON con la información del pedido actualizado
+components:
+  securitySchemes:
+    securityToken:
+      type: apiKey
+      in: header
+      name: x-token
+  schemas:
+    LoginSchema:
+      type: object
+      properties:
+        correo:
+          type: string
+          example: ricardo+admin@gmail.com
+        contrasena:
+          type: string
+          example: 12345678
+    UserSchema:
+      type: object
+      properties:
+        usuario:
+          type: string
+          example: Ricardo
+        nombre:
+          type: string
+          example: Ricardo
+        correo:
+          type: string
+          example: ricardo+admin@gmail.com
+        telefono:
+          type: string 
+          example: 1232434
+        direccion:
+          type: string
+          example: sdfsdfsasdasd
+        contrasena:
+          type: string
+          example: 12345678
+        rol:
+          type: string
+          example: admin
+    ProductSchema:
+      type: object
+      properties:
+        nombre: 
+          type: string
+          example: pan
+        precio:
+          type: number
+          example: 50
+        img:
+          type: string
+          example: 1232434
+    PurchaseSchema:
+      type: object
+      properties:
+        productos: 
+          type: array
+          items:
+            type: object
+            properties:
+              id: 
+                type: number
+                example: 3
+              cantidad:
+                type: number
+                example: 10
+    PurchaseStateSchema:
+      type: object
+      properties:
+        estado: 
+          type: string
+          example: Completado

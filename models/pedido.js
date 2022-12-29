@@ -1,20 +1,23 @@
 const { DataTypes } = require("sequelize");
 const db = require("../database/connection");
 
-const Producto = db.define('Producto', {
+const Pedido = db.define('Pedido', {
     id: {
         type: DataTypes.BIGINT,
         primaryKey: true
     },
-    nombre: {
-        type: DataTypes.STRING
-    },
-    precio: {
+    idUsuario: {
         type: DataTypes.INTEGER
     },
-    img: {
+    productos: {
+        type: DataTypes.STRING
+    },
+    direccion: {
+        type: DataTypes.STRING
+    },
+    estado: {
         type: DataTypes.STRING
     }
 })
 
-module.exports = Producto;
+module.exports = Pedido;

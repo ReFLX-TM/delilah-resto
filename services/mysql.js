@@ -7,7 +7,7 @@ class MysqlService {
         this.connection = createConnection({
             host: 'localhost',
             user: 'root',
-            database: 'resto',
+            database: 'delilah_resto',
             port: 3306
         })
     }

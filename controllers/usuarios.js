@@ -17,6 +17,11 @@ const usuariosGet = async (req = request, res = response) => {
 
 const usuarioPorIdGet = async (req = request, res = response) => {
     const { id } = req.params;
+
+    if (id != req.usuario.id && req.usuario.rol !== "admin") return res.status(404).send({
+            msg: `${req.usuario.nombre} no es administrador`
+    })
+
     const usuario = await Usuario.findByPk( id )
 
     if ( usuario ){
@@ -33,6 +38,10 @@ const usuariosPut = async (req = request, res = response) => {
     const { body } = req;
 
     try {
+        
+        if (id != req.usuario.id && req.usuario.rol !== "admin") return res.status(404).send({
+                msg: `${req.usuario.nombre} no es administrador`
+        })
         
         // Verificar usuario por id
         const usuarioParaActualizar = await Usuario.findByPk( id )
@@ -98,6 +107,11 @@ const usuariosDelete = async (req = request, res = response) => {
     const { id } = req.params;
 
     try {
+        
+        if (id != req.usuario.id && req.usuario.rol !== "admin") return res.status(404).send({
+                msg: `${req.usuario.nombre} no es administrador`
+        })
+        
         // Verificar usuario por id
         const usuarioParaEliminar = await Usuario.findByPk( id )
         if ( !usuarioParaEliminar ) {

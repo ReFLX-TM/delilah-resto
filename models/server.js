@@ -1,5 +1,7 @@
 const express = require('express');
 const db = require('../database/connection');
+const swaggerUi = require('swagger-ui-express')
+const YAML = require('yamljs')
 class Server {
 
     constructor () {
@@ -9,7 +11,8 @@ class Server {
         this.paths = {
             auth: '/api/auth',
             usuarios: '/api/usuarios',
-            productos: '/api/productos'
+            productos: '/api/productos',
+            pedidos: '/api/pedidos',
         };
 
         // Conexión a database
@@ -37,11 +40,13 @@ class Server {
     }
 
     routes() {
+        const swaggerDocument = YAML.load('./docs/spec.yml')
+        this.app.use( '/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
         this.app.use( this.paths.auth , require('../routes/auth'));
-
         this.app.use( this.paths.usuarios , require('../routes/usuarios'));
-
         this.app.use( this.paths.productos , require('../routes/productos'));
+        this.app.use( this.paths.pedidos , require('../routes/pedidos'));
+
     }
 
     listen() {

@@ -1,8 +1,5 @@
 const { request, response } = require('express');
-const bcrypt = require('bcryptjs');
-
 const Producto = require('../models/producto');
-const { body } = require('express-validator');
 
 const productosGet = async (req = request, res = response) => {
     const { limit = 5, offset = 0 } = req.query;
